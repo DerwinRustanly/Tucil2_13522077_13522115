@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 def midpoint(p1, p2):
     return (p1[0]+p2[0])/2 , (p1[1]+p2[1])/2
@@ -42,7 +43,10 @@ all_points = control_points.copy()
 iterations = int(input()) # More iterations for a smoother curve
 
 # Generate the curve
+start = time.time()
 divide_and_conquer_bezier(bezier_points, all_points, 0, iterations)
+end = time.time()
+print((end-start)*1000)
 
 # Convert to numpy array for plotting
 # print(control_points)
