@@ -13,6 +13,7 @@ def divide_and_conquer_bezier(points, all_points, current, iteration):
         mid3 = midpoint(mid1, mid2)
         mid4 = midpoint(points[2], points[3])
         mid5 = midpoint(mid2, mid4)
+        mid6 = midpoint(mid3,mid5)
         if points[1] not in all_points:
             all_points.append(points[1])
         points.remove(points[1])
@@ -20,7 +21,7 @@ def divide_and_conquer_bezier(points, all_points, current, iteration):
             all_points.append(points[1])
         points.remove(points[1])
         current+=1
-        leftpoints = [points[0],mid1,mid3, mid2]
+        leftpoints = [points[0],mid1,mid3, mid6]
         divide_and_conquer_bezier(leftpoints, all_points, current, iteration)
         for lp in leftpoints:
             if lp not in points:
@@ -31,7 +32,7 @@ def divide_and_conquer_bezier(points, all_points, current, iteration):
             points.remove(mid1)
         if mid3 in points:
             points.remove(mid3)
-        rightpoints = [mid2,mid5, mid4, points[1]]
+        rightpoints = [mid6,mid5, mid4, points[1]]
         divide_and_conquer_bezier(rightpoints, all_points, current, iteration)
         for rp in rightpoints:
             if rp not in points:
