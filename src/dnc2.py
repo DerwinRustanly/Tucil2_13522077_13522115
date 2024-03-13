@@ -11,9 +11,12 @@ def divide_and_conquer_bezier(points, all_points, current, iteration):
         mid1 = midpoint(points[0], points[1])
         mid2 = midpoint(points[1], points[2])
         mid3 = midpoint(points[2], points[3])
-        mid4 = midpoint(mid1, mid2)
-        mid5 = midpoint(mid2, mid3)
-        mid6 = midpoint(mid4, mid5)
+        mid4 = midpoint(points[3], points[4])
+        mid5 = midpoint(mid1, mid2)
+        mid6 = midpoint(mid2, mid3)
+        mid7 = midpoint(mid3, mid4)
+        mid8 = midpoint(mid5, mid6)
+        mid9 = midpoint(mid6, mid7)
         if points[1] not in all_points:
             all_points.append(points[1])
         points.remove(points[1])
@@ -46,7 +49,7 @@ def divide_and_conquer_bezier(points, all_points, current, iteration):
  
 
 
-# Control points for a qubic Bézier curve
+# Control points for a quartic Bézier curve
 control_points = [(0, 0), (1,8), (5, 0), (9,10)]
 bezier_points = control_points.copy()
 all_points = control_points.copy()
@@ -74,6 +77,6 @@ plt.plot(bezier_points_np[:, 0], bezier_points_np[:, 1], 'bo-', label='Bézier C
 plt.legend()
 plt.xlabel('X')
 plt.ylabel('Y')
-plt.title('Qubic Bézier Curve using Divide and Conquer')
+plt.title('Quartic Bézier Curve using Divide and Conquer')
 plt.grid(True)
 plt.show()
