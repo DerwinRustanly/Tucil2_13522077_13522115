@@ -13,18 +13,8 @@ def divide_and_conquer_bezier(points, all_points, current, iteration, n):
             for j in range (n-1-i):
                 subMidPoint.append(midpoint(midPoint[i][j] ,midPoint[i][j+1]))
             midPoint.append(subMidPoint)
-        print(midPoint)
-        # 
-        # lP = points[0]
-        # rP = points[3]
-        # mid1 = midpoint(points[0],points[1])
-        # mid2 = midpoint(points[1],points[2])
-        # mid3 = midpoint(points[2], points[3])
-        # mid4 = midpoint(mid1, mid2)
-        # mid5 = midpoint(mid2, mid3)
-        # mid6 = midpoint(mid4,mid5)
+        
         for i in range (n-2):
-            print('a')
             if points[1] not in all_points:
                 all_points.append(points[1])
             points.remove(points[1])
@@ -38,9 +28,12 @@ def divide_and_conquer_bezier(points, all_points, current, iteration, n):
                 points.append(lp)
             if lp not in all_points:
                 all_points.append(lp)
-        for i in range (1,n-2):
-            if leftpoints[i] in points:
-                points.remove(leftpoints[i])
+        l = len(leftpoints)
+        if leftpoints[l//2] in points:
+            points.remove(leftpoints[l//2])
+        if l%2==0:
+            if leftpoints[l//2-1] in points:
+                points.remove(leftpoints[l//2-1])
         
         rightpoints = []
         for i in range (n-1, -1, -1):
@@ -51,14 +44,17 @@ def divide_and_conquer_bezier(points, all_points, current, iteration, n):
                 points.append(rp)
             if rp not in all_points:
                 all_points.append(rp)
-        for i in range (1,n-2):
-            if rightpoints[i] in points:
-                points.remove(rightpoints[i])
+        l = len(rightpoints)
+        if rightpoints[l//2] in points:
+            points.remove(rightpoints[l//2])
+        if l%2==0:
+            if rightpoints[l//2-1] in points:
+                points.remove(rightpoints[l//2-1])
  
 
 
 # Control points for a quadratic Bézier curve
-control_points = [(0, 0), (1,8), (5, 0), (8, 10), (15,0)]
+control_points = [(0, 0), (1,8), (5, 0), (8, 10), (14, 0), (20, 15), (25,20)]
 bezier_points = control_points.copy()
 all_points = control_points.copy()
 
