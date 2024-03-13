@@ -13,7 +13,7 @@ def divide_and_conquer_bezier(points, all_points, current, iteration, n):
             for j in range (n-1-i):
                 subMidPoint.append(midpoint(midPoint[i][j] ,midPoint[i][j+1]))
             midPoint.append(subMidPoint)
-        # print(midPoint)
+        print(midPoint)
         # 
         # lP = points[0]
         # rP = points[3]
@@ -38,28 +38,27 @@ def divide_and_conquer_bezier(points, all_points, current, iteration, n):
                 points.append(lp)
             if lp not in all_points:
                 all_points.append(lp)
-        for i in range (n-2):
-            if leftpoints[i+1] in points:
-                points.remove(leftpoints[i+1])
+        for i in range (1,n-2):
+            if leftpoints[i] in points:
+                points.remove(leftpoints[i])
         
         rightpoints = []
         for i in range (n-1, -1, -1):
             rightpoints.append(midPoint[i][-1])
-        print(rightpoints)
         divide_and_conquer_bezier(rightpoints, all_points, current, iteration, n)
         for rp in rightpoints:
             if rp not in points:
                 points.append(rp)
             if rp not in all_points:
                 all_points.append(rp)
-        for i in range (n-2):
-            if rightpoints[i+1] in points:
-                points.remove(rightpoints[i+1])
+        for i in range (1,n-2):
+            if rightpoints[i] in points:
+                points.remove(rightpoints[i])
  
 
 
 # Control points for a quadratic Bézier curve
-control_points = [(0, 0), (1,8), (5, 0), (8, 10)]
+control_points = [(0, 0), (1,8), (5, 0), (8, 10), (15,0)]
 bezier_points = control_points.copy()
 all_points = control_points.copy()
 
