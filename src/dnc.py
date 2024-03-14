@@ -6,6 +6,7 @@ def midpoint(p1, p2):
     return (p1[0]+p2[0])/2 , (p1[1]+p2[1])/2
 def divide_and_conquer_bezier(points, all_points, current, iteration):
     if current < iteration:
+        rP = points[2]
         mid1 = midpoint(points[0],points[1])
         mid2 = midpoint(points[1],points[2])
         mid3 = midpoint(mid1, mid2)
@@ -31,7 +32,8 @@ def divide_and_conquer_bezier(points, all_points, current, iteration):
                 all_points.append(rp)
         if mid2 in points:
             points.remove(mid2)
- 
+        points.remove(points[1])
+        points.append(rP)
 
 
 # Control points for a quadratic Bézier curve
@@ -51,7 +53,7 @@ print((end-start)*1000)
 # Convert to numpy array for plotting
 # print(control_points)
 bezier_points_np = np.array(bezier_points)
-bezier_points_np = bezier_points_np[np.argsort(bezier_points_np[:, 0])]
+# bezier_points_np = bezier_points_np[np.argsort(bezier_points_np[:, 0])]
 # print(bezier_points_np)
 
 # Plotting
