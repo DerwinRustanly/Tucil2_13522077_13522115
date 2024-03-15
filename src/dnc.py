@@ -2,68 +2,47 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-def midpoint(p1, p2):
+def get_midpoint(p1, p2):
     return (p1[0]+p2[0])/2 , (p1[1]+p2[1])/2
-def divide_and_conquer_bezier(points, all_points, current, iteration):
+
+def divide_and_conquer_bezier(control_points, bezier_points, current, iteration, n):
     if current < iteration:
-        rP = points[2]
-        mid1 = midpoint(points[0],points[1])
-        mid2 = midpoint(points[1],points[2])
-        mid3 = midpoint(mid1, mid2)
-        if points[1] not in all_points:
-            all_points.append(points[1])
-        points.remove(points[1])
+        midPoints = []
+        midPoints.append(control_points.copy())
+        for i in range (n-1):
+            subMidPoint = []
+            for j in range (n-1-i):
+                subMidPoint.append(get_midpoint(midPoints[i][j] ,midPoints[i][j+1]))
+            midPoints.append(subMidPoint)
+        
+        leftpoints = [midPoints[i][0] for i in range(len(midPoints))]
+        rightpoints = [midPoints[i][-1] for i in range(len(midPoints)-1,-1,-1)]
         current+=1
-        leftpoints = [points[0],mid1,mid3]
-        divide_and_conquer_bezier(leftpoints, all_points, current, iteration)
-        for lp in leftpoints:
-            if lp not in points:
-                points.append(lp)
-            if lp not in all_points:
-                all_points.append(lp)
-        if mid1 in points:
-            points.remove(mid1)
-        rightpoints = [mid3, mid2, points[1]]
-        divide_and_conquer_bezier(rightpoints, all_points, current, iteration)
-        for rp in rightpoints:
-            if rp not in points:
-                points.append(rp)
-            if rp not in all_points:
-                all_points.append(rp)
-        if mid2 in points:
-            points.remove(mid2)
-        points.remove(points[1])
-        points.append(rP)
+        divide_and_conquer_bezier(leftpoints, bezier_points, current, iteration, n)
+        bezier_points.append(midPoints[-1][0])
+        divide_and_conquer_bezier(rightpoints, bezier_points, current, iteration, n)
 
 
-# Control points for a quadratic Bézier curve
-control_points = [(0, 0), (1, 2), (2, 0)]
-bezier_points = control_points.copy()
-all_points = control_points.copy()
+def generate_bezier():
+    start = time.time()
+    iterations = int(input()) # More iterations for a smoother curve
+    control_points = [(0, 0), (1,8), (5, 0), (8, 10), (14, 0), (20, 15), (25,20), (35,30), (20,4), (10,0)]
+    bezier_points = [control_points[0]]
+    divide_and_conquer_bezier(control_points, bezier_points, 0, iterations, len(control_points))
+    bezier_points.append(control_points[-1])
+    end = time.time()
+    print((end-start)*1000)
+    bezier_points_np = np.array(bezier_points)
+    plt.figure(figsize=(5, 5))
+    plt.plot(np.array(control_points)[:, 0], np.array(control_points)[:, 1], 'ro-', label='Control Points')
+    plt.plot(bezier_points_np[:, 0], bezier_points_np[:, 1], 'bo-', label='Bézier Curve')
+    plt.legend()
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.title('Quadratic Bézier Curve using Divide and Conquer')
+    plt.grid(True)
+    plt.show()
 
-# Iterations
-iterations = int(input()) # More iterations for a smoother curve
 
-# Generate the curve
-start = time.time()
-divide_and_conquer_bezier(bezier_points, all_points, 0, iterations)
-end = time.time()
-print((end-start)*1000)
-
-# Convert to numpy array for plotting
-# print(control_points)
-bezier_points_np = np.array(bezier_points)
-# bezier_points_np = bezier_points_np[np.argsort(bezier_points_np[:, 0])]
-# print(bezier_points_np)
-
-# Plotting
-plt.figure(figsize=(5, 5))
-plt.plot(np.array(control_points)[:, 0], np.array(control_points)[:, 1], 'ro-', label='Control Points')
-plt.plot(np.array(all_points)[:, 0], np.array(all_points)[:, 1], 'go', label='Points')
-plt.plot(bezier_points_np[:, 0], bezier_points_np[:, 1], 'bo-', label='Bézier Curve')
-plt.legend()
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.title('Quadratic Bézier Curve using Divide and Conquer')
-plt.grid(True)
-plt.show()
+if __name__ == "__main__":
+    generate_bezier()
