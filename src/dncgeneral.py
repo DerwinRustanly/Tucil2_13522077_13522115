@@ -4,6 +4,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import *
 import ast
 import time
+import sys
 
 # Define necessary functions for Bézier curve generation
 def sort_coordinates_by_shortest_path(coordinates):
@@ -99,5 +100,13 @@ execution_time_label = Label(window, text="Execution Time: 0 ms")
 execution_time_label.pack() 
 
 canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+
+
+def on_closing():
+    print("a")
+    window.destroy()
+    sys.exit()
+
+window.protocol("WM_DELETE_WINDOW", on_closing)
 
 window.mainloop()
