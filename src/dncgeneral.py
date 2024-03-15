@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.animation import FuncAnimation
 from tkinter import *
 import ast
 import time
@@ -144,6 +145,57 @@ def on_generate_button_clicked(method):
         # General error handling
         execution_time_label.config(text=f"Unexpected error: {str(e)}")
 
+# Define necessary functions for animation
+def animate_bezier(iterations, control_points):
+    def update(frame):
+        ax.clear()
+        ax.plot(np.array(control_points)[:, 0], np.array(control_points)[:, 1], 'ro-', label='Control Points')
+
+        bezier_points = [control_points[0]]
+        divide_and_conquer_bezier(control_points, bezier_points, 0, frame + 1, len(control_points))
+        bezier_points.append(control_points[-1])
+        bezier_points_np = np.array(bezier_points)
+        
+        ax.plot(bezier_points_np[:, 0], bezier_points_np[:, 1], 'bo-', label='Bézier Curve')
+        ax.legend()
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_title('Bézier Curve Animation - Iteration {}'.format(frame + 1))
+        ax.grid(True)
+
+    anim = FuncAnimation(fig, update, frames=iterations, repeat=False)
+    canvas.draw()
+
+# Define event handler for the "Generate Animation" button
+def on_generate_animation_button_clicked():
+    try:
+        iterations = int(iterations_entry.get())
+        if iterations <= 0:
+            raise ValueError("Number of iterations must be greater than 0.")
+        input_points = str(control_points_entry.get())
+        points = ast.literal_eval(input_points)
+        
+        # Validate the points format
+        if not all(isinstance(point, tuple) and len(point) == 2 for point in points):
+            raise ValueError("Control points must be a list of tuples (x, y).")
+        
+        start = time.time()
+        animate_bezier(iterations, points)
+        end = time.time()
+        execution_time = (end - start) * 1000  # Calculate execution time in milliseconds
+
+        # Display execution time
+        execution_time_label.config(text=f"Execution Time: {execution_time:.2f} ms", font=("Nirmala UI", 16))
+
+    except ValueError as e:
+        # Display the error message
+        execution_time_label.config(text=f"Error: {str(e)}")
+    except SyntaxError:
+        # Handle incorrect syntax in control points entry
+        execution_time_label.config(text="Error: Invalid syntax in control points.")
+    except Exception as e:
+        # General error handling
+        execution_time_label.config(text=f"Unexpected error: {str(e)}")
 
 # UI Components setup with updated colors and styles
 title = Label(window, text="Bezier Curve Generator", font=("Nirmala UI", 36, "bold"), pady=10, bg=bg_color, fg=text_color)
@@ -168,6 +220,9 @@ generate_button = Button(buttons_frame, text="Generate Curve (D&C)", font=("Nirm
 generate_button.grid(row=0, column=0, padx=10)
 brute_force_button = Button(buttons_frame, text="Generate Curve (Brute Force)", font=("Nirmala UI", 16), command=lambda: on_generate_button_clicked(method='brute_force'), bg=button_color, fg=text_color)
 brute_force_button.grid(row=0, column=1, padx=10)
+
+generate_animation_button = Button(buttons_frame, text="Generate Animation", font=("Nirmala UI", 16), command=on_generate_animation_button_clicked, bg=button_color, fg=text_color)
+generate_animation_button.grid(row=0, column=2, padx=10)
 
 execution_time_label = Label(window, text="Execution Time: 0 ms", font=("Nirmala UI", 16), bg=bg_color, fg=text_color)
 execution_time_label.pack(pady=10)
