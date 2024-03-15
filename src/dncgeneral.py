@@ -103,7 +103,6 @@ canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
 
 
 def on_closing():
-    print("a")
     window.destroy()
     sys.exit()
 

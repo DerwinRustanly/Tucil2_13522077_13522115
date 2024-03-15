@@ -25,13 +25,13 @@ def divide_and_conquer_bezier(control_points, bezier_points, current, iteration,
 
 def generate_bezier():
     start = time.time()
-    iterations = int(input()) # More iterations for a smoother curve
+    iterations = int(input("Enter the number of iterations for smoothness: ")) # More iterations for a smoother curve
     control_points = [(0, 0), (1,8), (5, 0), (8, 10), (14, 0), (20, 15), (25,20), (35,30), (20,4), (10,0)]
     bezier_points = [control_points[0]]
     divide_and_conquer_bezier(control_points, bezier_points, 0, iterations, len(control_points))
     bezier_points.append(control_points[-1])
     end = time.time()
-    print((end-start)*1000)
+    print(f"Time taken: {(end-start)*1000} ms")
     bezier_points_np = np.array(bezier_points)
     plt.figure(figsize=(5, 5))
     plt.plot(np.array(control_points)[:, 0], np.array(control_points)[:, 1], 'ro-', label='Control Points')
