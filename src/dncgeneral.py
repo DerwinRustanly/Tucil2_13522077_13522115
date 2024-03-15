@@ -18,50 +18,26 @@ def sort_coordinates_by_shortest_path(coordinates):
     
     return sorted_coords
 
-def midpoint(p1, p2):
+def get_midpoint(p1, p2):
     return (p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2
 
-def divide_and_conquer_bezier(points, all_points, current, iteration, n):
+def divide_and_conquer_bezier(control_points, bezier_points, current, iteration, n):
     if current < iteration:
-        midPoint = [points.copy()]
-        for i in range(n-1):
+        midPoints = []
+        midPoints.append(control_points.copy())
+        for i in range (n-1):
             subMidPoint = []
-            for j in range(n-1-i):
-                subMidPoint.append(midpoint(midPoint[i][j], midPoint[i][j+1]))
-            midPoint.append(subMidPoint)
+            for j in range (n-1-i):
+                subMidPoint.append(get_midpoint(midPoints[i][j] ,midPoints[i][j+1]))
+            midPoints.append(subMidPoint)
         
-        for i in range(n-2):
-            if points[1] not in all_points:
-                all_points.append(points[1])
-            points.remove(points[1])
-        current += 1
-        leftpoints = [midPoint[i][0] for i in range(n)]
-        divide_and_conquer_bezier(leftpoints, all_points, current, iteration, n)
-        for lp in leftpoints:
-            if lp not in points:
-                points.append(lp)
-            if lp not in all_points:
-                all_points.append(lp)
-        l = len(leftpoints)
-        if leftpoints[l//2] in points:
-            points.remove(leftpoints[l//2])
-        if l % 2 == 0:
-            if leftpoints[l//2-1] in points:
-                points.remove(leftpoints[l//2-1])
-        
-        rightpoints = [midPoint[i][-1] for i in range(n-1, -1, -1)]
-        divide_and_conquer_bezier(rightpoints, all_points, current, iteration, n)
-        for rp in rightpoints:
-            if rp not in points:
-                points.append(rp)
-            if rp not in all_points:
-                all_points.append(rp)
-        l = len(rightpoints)
-        if rightpoints[l//2] in points:
-            points.remove(rightpoints[l//2])
-        if l % 2 == 0:
-            if rightpoints[l//2-1] in points:
-                points.remove(rightpoints[l//2-1])
+        leftpoints = [midPoints[i][0] for i in range(len(midPoints))]
+        rightpoints = [midPoints[i][-1] for i in range(len(midPoints)-1,-1,-1)]
+        current+=1
+        divide_and_conquer_bezier(leftpoints, bezier_points, current, iteration, n)
+        bezier_points.append(midPoints[-1][0])
+        divide_and_conquer_bezier(rightpoints, bezier_points, current, iteration, n)
+
 
 # Tkinter window setup
 window = Tk()
@@ -71,12 +47,9 @@ fig, ax = plt.subplots(figsize=(10, 10))
 canvas = FigureCanvasTkAgg(fig, master=window)
 
 def generate_bezier(iterations, control_points):
-    bezier_points = control_points.copy()
-    all_points = control_points.copy()
-
-    divide_and_conquer_bezier(bezier_points, all_points, 0, iterations, len(bezier_points))
-    
-    bezier_points = sort_coordinates_by_shortest_path(bezier_points)
+    bezier_points = [control_points[0]]
+    divide_and_conquer_bezier(control_points, bezier_points, 0, iterations, len(control_points))
+    bezier_points.append(control_points[-1])
     bezier_points_np = np.array(bezier_points)
 
     # Clear the previous plot
