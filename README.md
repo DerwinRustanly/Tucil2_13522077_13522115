@@ -60,7 +60,7 @@ The algorithm effectively divides the original Bezier curve into two halves at e
 
 ## Running The Program
 
-To run the program, simply run the `guy.py` python script in the `src` folder
+To run the program, simply run the `gui.py` python script in the `src` folder
 
 ## Libraries Used
 
