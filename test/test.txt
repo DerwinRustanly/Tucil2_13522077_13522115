@@ -1,0 +1,6 @@
+Kasus Tiga Titik Kontrol - [(0, 0), (3, 5), (5, -2)] 
+Kasus Lima Titik Kontrol - [(0, 0), (3, 5), (5, -2), (8, 4), (10, 0)]
+Kasus Enam Titik Kontrol - [(0, 0), (5, 10), (10, 5), (35,20), (20, 0), (0, 27)]
+Kasus Tujuh Titik Kontrol - [(0, 0), (5, 10), (10, 5), (15, 10), (20, 0), (25, 5), (0, 0)]
+Kasus Delapan Titik Kontrol - [(0, 0), (3, 8), (5, 2), (7, 10), (10, 1), (12, 7), (15, 0), (18, 8)]
+Kasus Sepuluh Titik Kontrol - [(0, 0), (1, 8), (5, 0), (8, 10), (14, 0), (20, 15), (25, 20), (35, 30), (20, 4), (10, 0)]
