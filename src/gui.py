@@ -149,13 +149,18 @@ def on_generate_button_clicked(method):
 def animate_bezier(iterations, control_points):
     def update(frame):
         ax.clear()
+        start = time.time()
         ax.plot(np.array(control_points)[:, 0], np.array(control_points)[:, 1], 'ro-', label='Control Points')
 
         bezier_points = [control_points[0]]
         divide_and_conquer_bezier(control_points, bezier_points, 0, frame + 1, len(control_points))
         bezier_points.append(control_points[-1])
         bezier_points_np = np.array(bezier_points)
-        
+        end = time.time()
+        execution_time = (end - start) * 1000  # Calculate execution time in milliseconds
+
+        # Display execution time
+        execution_time_label.config(text=f"Execution Time: {execution_time:.2f} ms", font=("Nirmala UI", 16))
         ax.plot(bezier_points_np[:, 0], bezier_points_np[:, 1], 'bo-', label='Bézier Curve')
         ax.legend()
         ax.set_xlabel('X')
@@ -179,13 +184,7 @@ def on_generate_animation_button_clicked():
         if not all(isinstance(point, tuple) and len(point) == 2 for point in points):
             raise ValueError("Control points must be a list of tuples (x, y).")
         
-        start = time.time()
         animate_bezier(iterations, points)
-        end = time.time()
-        execution_time = (end - start) * 1000  # Calculate execution time in milliseconds
-
-        # Display execution time
-        execution_time_label.config(text=f"Execution Time: {execution_time:.2f} ms", font=("Nirmala UI", 16))
 
     except ValueError as e:
         # Display the error message
