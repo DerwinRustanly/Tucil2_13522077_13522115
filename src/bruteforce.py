@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import time
 from math import comb
 
+# Function to calculate a single point on the Bézier curve
 def calculate_bezier_point(t, control_points, n):
     point = np.zeros(2)
     for i, p in enumerate(control_points):
@@ -11,6 +12,7 @@ def calculate_bezier_point(t, control_points, n):
         point += np.array(p) * bernstein_coeff
     return point
 
+# Function to compute the Bézier curve points using brute force method
 def brute_force_bezier(control_points, iterations):
     n = len(control_points) - 1
     bezier_points = []
@@ -19,6 +21,7 @@ def brute_force_bezier(control_points, iterations):
         bezier_points.append(calculate_bezier_point(t, control_points, n))
     return bezier_points
 
+# Main function to generate and plot the Bézier curve using brute force
 def generate_bezier_brute_force():
     start = time.time()
     iterations = int(input("Enter the number of iterations for smoothness: ")) # More iterations for a smoother curve

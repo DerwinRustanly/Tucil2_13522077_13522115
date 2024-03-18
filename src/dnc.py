@@ -2,12 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
+# Function to calculate the midpoint between two points
 def get_midpoint(p1, p2):
     return (p1[0]+p2[0])/2 , (p1[1]+p2[1])/2
 
+# Recursive function for generating Bézier points using divide and conquer approach
 def divide_and_conquer_bezier(control_points, bezier_points, current, iteration, n):
     if current < iteration:
-        # get array of midpoint
+        # Initialize list to store midpoints for each subdivision
         midPoints = []
         midPoints.append(control_points.copy())
         for i in range (n-1):
@@ -15,16 +17,16 @@ def divide_and_conquer_bezier(control_points, bezier_points, current, iteration,
             for j in range (n-1-i):
                 subMidPoint.append(get_midpoint(midPoints[i][j] ,midPoints[i][j+1]))
             midPoints.append(subMidPoint)
-        # bagi dalam kiri dan kanan
+        # Divide the control points into left and right parts for further subdivision
         leftpoints = [midPoints[i][0] for i in range(len(midPoints))]
         rightpoints = [midPoints[i][-1] for i in range(len(midPoints)-1,-1,-1)]
         current+=1
         divide_and_conquer_bezier(leftpoints, bezier_points, current, iteration, n)
-        # insert ke bezier points
+        # Add the midpoint of the last subdivision to the Bézier points
         bezier_points.append(midPoints[-1][0])
         divide_and_conquer_bezier(rightpoints, bezier_points, current, iteration, n)
 
-
+# Main function to generate and plot the Bézier curve using dnc
 def generate_bezier():
     start = time.time()
     iterations = int(input("Enter the number of iterations for smoothness: ")) # More iterations for a smoother curve
