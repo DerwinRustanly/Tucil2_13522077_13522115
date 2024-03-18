@@ -115,6 +115,7 @@ def generate_bezier_brute_force(iterations, control_points):
 
 def on_generate_button_clicked(method):
     try:
+        execution_time_label.config(text="On progress dude..", font=("Nirmala UI", 16))
         iterations = int(iterations_entry.get())
         if iterations <= 0:
             raise ValueError("Number of iterations must be greater than 0.")

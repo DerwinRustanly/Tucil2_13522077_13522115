@@ -7,6 +7,7 @@ def get_midpoint(p1, p2):
 
 def divide_and_conquer_bezier(control_points, bezier_points, current, iteration, n):
     if current < iteration:
+        # get array of midpoint
         midPoints = []
         midPoints.append(control_points.copy())
         for i in range (n-1):
@@ -14,11 +15,12 @@ def divide_and_conquer_bezier(control_points, bezier_points, current, iteration,
             for j in range (n-1-i):
                 subMidPoint.append(get_midpoint(midPoints[i][j] ,midPoints[i][j+1]))
             midPoints.append(subMidPoint)
-        
+        # bagi dalam kiri dan kanan
         leftpoints = [midPoints[i][0] for i in range(len(midPoints))]
         rightpoints = [midPoints[i][-1] for i in range(len(midPoints)-1,-1,-1)]
         current+=1
         divide_and_conquer_bezier(leftpoints, bezier_points, current, iteration, n)
+        # insert ke bezier points
         bezier_points.append(midPoints[-1][0])
         divide_and_conquer_bezier(rightpoints, bezier_points, current, iteration, n)
 
